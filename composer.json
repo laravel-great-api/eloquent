@@ -1,0 +1,38 @@
+{
+    "name": "laravel-great-api/eloquent",
+    "description": "",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Author Name",
+            "email": "author@email.com",
+            "homepage": "http://author.com"
+        }
+    ],
+    "homepage": "https://github.com/laravel-great-api/eloquent",
+    "keywords": ["Laravel", "Eloquent"],
+    "require": {
+        "illuminate/support": "~9"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~9.0",
+        "orchestra/testbench": "~7"
+    },
+    "autoload": {
+        "psr-4": {
+            "LaravelGreatApi\\Eloquent\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "LaravelGreatApi\\Eloquent\\Tests\\": "tests"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "LaravelGreatApi\\Eloquent\\ServiceProvider"
+            ]
+        }
+    }
+}
