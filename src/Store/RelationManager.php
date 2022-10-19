@@ -3,10 +3,8 @@
 namespace LaravelGreatApi\Eloquent\Store;
 
 use Illuminate\Database\Eloquent\Model;
-use LaravelGreatApi\Eloquent\Store\Fields\Abstraction\Relation;
+use LaravelGreatApi\Eloquent\Store\Relations\Relation;
 use LaravelGreatApi\Eloquent\Store\Repositories\Repository;
-use LaravelGreatApi\Eloquent\Store\Repositories\RepositoryCreate;
-use LaravelGreatApi\Eloquent\Store\Repositories\RepositoryUpdate;
 use LaravelGreatApi\Helpers\Data;
 
 class RelationManager
@@ -16,7 +14,7 @@ class RelationManager
 	 *
 	 * @var Relation
 	 */
-	private Relation $field;
+	private Relation $relation;
 
 	/**
 	 * Undocumented variable
@@ -42,89 +40,36 @@ class RelationManager
 	/**
 	 * Undocumented function
 	 *
-	 * @param Relation $field
-	 * @param Data $data
-	 * @param Model $model
-	 * @param Repository $repository
+	 * @param \LaravelGreatApi\Eloquent\Store\Relations\Relation $relation
+	 * @param \LaravelGreatApi\Helpers\Data $data
+	 * @param \Illuminate\Database\Eloquent\Model $model
+	 * @param \LaravelGreatApi\Eloquent\Store\Repositories\Repository $repository
 	 */
-	public function __construct(Relation $field, Data $data, Model $model, Repository $repository)
+	public function __construct(Relation $relation, Data $data, Model $model, Repository $repository)
 	{
-		$this->field = $field;
-
+		$this->relation = $relation;
 		$this->data = $data;
-
 		$this->model = $model;
-
 		$this->repository = $repository;
 	}
 
-	/**
-	 * Undocumented function
-	 *
-	 * @return mixed
-	 */
-	private function getRelation()
-	{
-		return $this->field->getRelationName();
-	}
+    /**
+     * Undocumented function
+     *
+     * @return array|null
+     */
+    private function data(): ?array
+    {
+        return $this->data->get($this->relation->key());
+    }
 
-	/**
-	 * Undocumented function
-	 *
-	 * @return mixed
-	 */
-	private function relationMethod()
-	{
-		return "{$this->getRelation()}Relation";
-	}
+    public function create()
+    {
+        $this->relation->create($this->model, $this->data());
+    }
 
-	/**
-	 * Undocumented function
-	 *
-	 * @return mixed
-	 */
-	private function getRelationData()
-	{
-		return $this->data->get($this->getRelation());
-	}
-
-	/**
-	 * Undocumented function
-	 *
-	 * @return Store
-	 */
-	private function getStore()
-	{
-		return $this->repository->getStore();
-	}
-
-	/**
-	 * Undocumented function
-	 *
-	 * @return mixed
-	 */
-	private function getRelationClass()
-	{
-		return $this->getStore()->{$this->relationMethod()}($this->getRelationData()); 
-	}
-
-	/**
-	 * Undocumented function
-	 *
-	 * @return mixed
-	 */
-	public function create()
-	{
-		$this->getRelationClass()->create($this->field, $this->model);
-	}
-
-	/**
-	 * Undocumented function
-	 *
-	 * @return mixed
-	 */
-	public function update()
-	{
-		$this->getRelationClass()->update($this->field, $this->model->{$this->getRelation()});
-	}
+    public function update()
+    {
+        $this->relation->update($this->model, $this->data());
+    }
 }

@@ -7,15 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use LaravelGreatApi\Eloquent\Store\Concerns\HasStore;
-use LaravelGreatApi\Eloquent\Store\Contracts\Fields\RelationToMany;
 use LaravelGreatApi\Eloquent\Store\FieldFiller;
 use LaravelGreatApi\Eloquent\Store\Fields\Abstraction\Attribute as AttributeField;
 use LaravelGreatApi\Eloquent\Store\Store;
 use LaravelGreatApi\Helpers\Data;
 use LaravelGreatApi\Eloquent\Store\Observer;
 use LaravelGreatApi\Eloquent\Store\RelationManager;
-use LaravelGreatApi\Eloquent\Store\Contracts\Fields\RelationToOne;
 use LaravelGreatApi\Eloquent\Store\Fields\NewField;
+use LaravelGreatApi\Eloquent\Store\Relations\ToManyRelation;
+use LaravelGreatApi\Eloquent\Store\Relations\ToOneRelation;
 
 /**
  * @method $this registerStore
@@ -176,10 +176,10 @@ class Repository
 	 * @param [type] $field
 	 * @return RelationManager
 	 */
-	private function relationManager($field): RelationManager
+	private function relationManager($relation): RelationManager
 	{
 		return new RelationManager(
-			$field,
+			$relation,
 			$this->getData(),
 			$this->getModel(),
 			$this
@@ -192,11 +192,26 @@ class Repository
 	 * @param Closure $callback
 	 * @return void
 	 */
+	private function eachRelations(Closure $callback)
+	{
+        if ($this->store->hasRelations()) {
+            foreach($this->store->relations($this->getData()) as $relation) {
+                $callback($relation);
+            }
+        }
+	}
+
+	/**
+	 * Undocumented function
+	 *
+	 * @param Closure $callback
+	 * @return void
+	 */
 	private function eachRelationsToOne(Closure $callback)
 	{
-		$this->eachFields(function($field) use($callback) {
-			if ($field instanceof RelationToOne) {
-				$callback($this->relationManager($field));
+		$this->eachRelations(function($relation) use($callback) {
+			if ($relation instanceof ToOneRelation) {
+				$callback($this->relationManager($relation));
 			}
 		});
 	}
@@ -209,8 +224,8 @@ class Repository
 	 */
 	private function eachRelationsToMany(Closure $callback)
 	{
-		$this->eachFields(function($field) use($callback) {
-			if ($field instanceof RelationToMany && $field->isFillable()) {
+		$this->eachRelations(function($field) use($callback) {
+			if ($field instanceof ToManyRelation) {
 				$callback($this->relationManager($field));
 			}
 		});
@@ -345,7 +360,9 @@ class Repository
 			$this->store->getRelation()->attach($this->model, [], true);
 		}
 
-		$this->eachRelationsToMany(fn(RelationManager $relationManager) => $relationManager->create());
+		$this->eachRelationsToMany(
+            fn(RelationManager $relationManager) => $relationManager->create()
+        );
 
 		return $this->model;
 	}

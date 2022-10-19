@@ -2,90 +2,30 @@
 
 namespace LaravelGreatApi\Eloquent\Store\Relations;
 
-use Closure;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\Request;
-use LaravelGreatApi\Eloquent\Store\Store;
-
 /**
- * @method array overrideData
+ * @method mixed create($model, $data)
+ * @method mixed update($model, $data)
+ * @method mixed store()
  * @property string $store
  */
-abstract class Relation
+class Relation
 {
-	/**
-	 * Undocumented variable
-	 *
-	 * @var array
-	 */
-	private array $data;
+    public function key()
+    {
+        return $this->key;
+    }
 
-	/**
-	 * Undocumented variable
-	 *
-	 * @var Model
-	 */
-	protected Model $relation;
+    public function column()
+    {
+        return $this->column;
+    }
 
-	/**
-	 * Undocumented variable
-	 *
-	 * @var [type]
-	 */
-	protected $storeInstance;
+    protected function getStore(): string
+    {
+        if (method_exists($this, 'store')) {
+            return $this->store();
+        }
 
-	/**
-	 * Undocumented function
-	 *
-	 * @param Request $request
-	 * @param array $data
-	 */
-	public function __construct(array $data)
-	{
-		$this->data = $data;
-
-		$this->storeInstance = $this->createStoreInstance();
-	}
-
-	/**
-	 * Undocumented function
-	 *
-	 * @return array
-	 */
-	protected function data(): array
-	{
-		if (method_exists($this, 'overrideData')) {
-			return $this->overrideData($this->data);
-		}
-
-		return $this->data;
-	}
-
-	protected function eachData(Closure $callback)
-	{
-		foreach($this->data() as $data) {
-			$callback($data);
-		}
-	}
-
-	/**
-	 * Undocumented function
-	 *
-	 * @return Store|null
-	 */
-	protected function createStoreInstance(): ?Store
-	{
-		if (property_exists($this, 'store')) {
-			return app(static::$store);
-		}
-
-		return null;
-	}
-
-	protected function store($data = null)
-	{
-		$payload = $data ?? $this->data();
-
-		return $this->storeInstance->create($payload)->getModel();
-	}
+        return static::$store;
+    }
 }

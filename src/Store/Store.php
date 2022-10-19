@@ -10,7 +10,7 @@ use LaravelGreatApi\Eloquent\Store\Repositories\RepositoryUpdate;
 
 /**
  * Undocumented class
- * 
+ *
  * @property Model $model
  * @method static \LaravelGreatApi\Eloquent\Store\Repositories\RepositoryCreate create($data)
  * @method \LaravelGreatApi\Eloquent\Store\Repositories\RepositoryCreate create($data)
@@ -141,4 +141,25 @@ abstract class Store
 	{
 		return App::make(static::class);
 	}
+
+    /**
+     * Undocumented function
+     *
+     * @param string $store
+     * @return Store
+     */
+    public static function of(string $store): Store
+    {
+        return $store::newInstance();
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @return boolean
+     */
+    public function hasRelations(): bool
+    {
+        return method_exists($this, 'relations');
+    }
 }

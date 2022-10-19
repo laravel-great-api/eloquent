@@ -2,7 +2,7 @@
 
 namespace LaravelGreatApi\Eloquent\Store\Relations;
 
-class BelongsTo extends ToOneRelation
+class ToManyRelation extends Relation
 {
     //
 }
