@@ -20,7 +20,6 @@ class RepositoryCreate extends Repository
 			->setModel($model)
 			->setData(new Data($data))
 			->registerStore($store)
-			->registerObserver(new Observer($this))
-			->store();
+			->registerObserver(new Observer($this));
 	}
 }

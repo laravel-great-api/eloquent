@@ -53,23 +53,21 @@ class RelationManager
 		$this->repository = $repository;
 	}
 
-    /**
-     * Undocumented function
-     *
-     * @return array|null
-     */
-    private function data(): ?array
-    {
-        return $this->data->get($this->relation->key());
-    }
-
     public function create()
     {
-        $this->relation->create($this->model, $this->data());
+        $this
+            ->relation
+            ->setModel($this->model)
+            ->setData($this->data)
+            ->create();
     }
 
     public function update()
     {
-        $this->relation->update($this->model, $this->data());
+        $this
+            ->relation
+            ->setModel($this->model)
+            ->setData($this->data)
+            ->update();
     }
 }

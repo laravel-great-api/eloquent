@@ -9,88 +9,65 @@ use LaravelGreatApi\Eloquent\Store\Repositories\RepositoryCreate;
 use LaravelGreatApi\Eloquent\Store\Repositories\RepositoryUpdate;
 
 /**
- * Undocumented class
- *
- * @property Model $model
- * @method static \LaravelGreatApi\Eloquent\Store\Repositories\RepositoryCreate create($data)
- * @method \LaravelGreatApi\Eloquent\Store\Repositories\RepositoryCreate create($data)
- * @method static \LaravelGreatApi\Eloquent\Store\Repositories\RepositoryUpdate update($data, $model)
  * @method void beforeCreate($model, $data)
  * @method void beforeUpdate($model, $data)
  * @method void afterCreate($model, $data)
  * @method void afterUpdate($model, $data)
  */
-abstract class Store
+class Store
 {
 	/**
-	 * Undocumented function
+	 * Undocumented variable
 	 *
-	 * @param [type] $method
-	 * @param [type] $parameters
-	 * @return mixed
+	 * @var \Illuminate\Database\Eloquent\Relations\Relation|null
 	 */
-    public static function __callStatic($method, $parameters)
+	private ?Relation $relation = null;
+
+    /**
+     * Undocumented variable
+     *
+     * @var \LaravelGreatApi\Eloquent\Store\Repositories\RepositoryCreate
+     */
+    private RepositoryCreate $create;
+
+    /**
+     * Undocumented variable
+     *
+     * @var \LaravelGreatApi\Eloquent\Store\Repositories\RepositoryUpdate
+     */
+    private RepositoryUpdate $update;
+
+    /**
+     * Undocumented function
+     *
+     * @param \Illuminate\Database\Eloquent\Model $model
+     * @param array $data
+     * @param \Illuminate\Database\Eloquent\Relations\Relation|null $relation
+     */
+    public function __construct(Model $model, array $data, ?Relation $relation = null)
     {
-		return (new static)->$method(...$parameters);
+        $this->ceate = new RepositoryCreate($relation ?? $model, $data, $this);
+        $this->update = new RepositoryUpdate($model, $data, $this);
     }
 
 	/**
 	 * Undocumented function
 	 *
-	 * @param [type] $method
-	 * @param [type] $parameters
-	 * @return mixed
+	 * @return Model
 	 */
-	public function __call($method, $parameters)
+	public function create(): Model
 	{
-		if (in_array($method, ['create', 'update'])) {
-			return $this->{$method . 'Repository'}(...array_values($parameters));
-		}
-	}
-
-	/**
-	 * Undocumented variable
-	 *
-	 * @var Relation|null
-	 */
-	private ?Relation $relation = null;
-
-	/**
-	 * Define Fields
-	 *
-	 * @return array
-	 */
-	abstract public function fields($field, $data): array;
-
-	/**
-	 * Undocumented function
-	 *
-	 * @param array $data
-	 * @return RepositoryCreate
-	 */
-	public function createRepository(array $data): RepositoryCreate
-	{
-		return new RepositoryCreate($this->relation?->getRelated() ?? new static::$model, $data, $this);
+		return $this->ceate->store();
 	}
 
 	/**
 	 * Undocumented function
 	 *
-	 * @param array $data
-	 * @return RepositoryUpdate
+	 * @return Model
 	 */
-	public function updateRepository(array $data, Model $model): RepositoryUpdate
+	public function update(): Model
 	{
-		return new RepositoryUpdate($model, $data, $this);
-	}
-
-	public static function updateMany(array $ids, array $data)
-	{
-		$query = static::$model::whereIn('id', $ids);
-
-		$query->each(fn($model) => self::newInstance()->update($data, $model)->getModel());
-
-		return $query->get();
+		return $this->update->store();
 	}
 
 	/**

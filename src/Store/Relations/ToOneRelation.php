@@ -33,54 +33,37 @@ class ToOneRelation extends Relation
     protected Data $data;
 
     /**
-     * Comstructor
-     *
-     * @param string $key
-     * @param string|null $column
-     */
-    public function __construct(string $key, ?string $column = null)
-    {
-        $this->key = $key;
-        $this->column = $column ?? "{$key}_id";
-    }
-
-    /**
      * Undocumented function
      *
      * @param string $key
      * @param string|null $column
      * @return LaravelGreatApi\Eloquent\Store\Relations\Relation
      */
-    public static function make(string $key, ?string $column = null): Relation
+    public static function make(): Relation
     {
-        return new static($key, $column);
+        return new static();
     }
 
     /**
      * Undocumented function
      *
-     * @param Model $model
-     * @param array $data
      * @return void
      */
-    public function create(Model $model, array $data): void
+    public function create(): void
     {
-        $this->data = new Data($data);
+        $relation = $this->store()->create();
 
-        $relation = Store::of($this->getStore())->create($data)->getModel();
-
-        $model->{$this->column()} = $relation->id;
+        $this->model->{$this->column()} = $relation->id;
     }
 
     /**
      * Undocumented function
      *
-     * @param array $data
      * @return void
      */
-    public function update(Model $model, array $data): void
+    public function update(): void
     {
-        Store::of($this->getStore())->update($data, $model->{$this->key});
+        $this->model->{$this->key()}->store($this->data)->update();
     }
 
     /**

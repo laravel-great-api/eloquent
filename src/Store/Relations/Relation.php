@@ -20,12 +20,15 @@ class Relation
         return $this->column;
     }
 
-    protected function getStore(): string
+    public function setModel($model)
     {
-        if (method_exists($this, 'store')) {
-            return $this->store();
-        }
+        $this->model = $model;
 
-        return static::$store;
+        return $this;
+    }
+
+    public function setData($data)
+    {
+        return $this->data = $data;
     }
 }
