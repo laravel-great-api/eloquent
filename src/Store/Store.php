@@ -6,13 +6,16 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\App;
 use LaravelGreatApi\Eloquent\Store\Repositories\RepositoryCreate;
+use LaravelGreatApi\Eloquent\Store\Repositories\RepositoryDelete;
 use LaravelGreatApi\Eloquent\Store\Repositories\RepositoryUpdate;
 
 /**
  * @method void beforeCreate($model, $data)
- * @method void beforeUpdate($model, $data)
  * @method void afterCreate($model, $data)
+ * @method void beforeUpdate($model, $data)
  * @method void afterUpdate($model, $data)
+ * @method void beforeDelete($model, $data)
+ * @method void afterDelete($model, $data)
  */
 class Store
 {
@@ -38,6 +41,13 @@ class Store
     private RepositoryUpdate $update;
 
     /**
+     * Undocumented variable
+     *
+     * @var \LaravelGreatApi\Eloquent\Store\Repositories\RepositoryDelete
+     */
+    private RepositoryDelete $delete;
+
+    /**
      * Undocumented function
      *
      * @param \Illuminate\Database\Eloquent\Model $model
@@ -46,8 +56,9 @@ class Store
      */
     public function __construct(Model $model, array $data, ?Relation $relation = null)
     {
-        $this->ceate = new RepositoryCreate($relation ?? $model, $data, $this);
+        $this->create = new RepositoryCreate($relation ?? $model, $data, $this);
         $this->update = new RepositoryUpdate($model, $data, $this);
+        $this->delete = new RepositoryDelete($model, $data, $this);
     }
 
 	/**
@@ -57,7 +68,7 @@ class Store
 	 */
 	public function create(): Model
 	{
-		return $this->ceate->store();
+		return $this->create->store();
 	}
 
 	/**
@@ -68,6 +79,16 @@ class Store
 	public function update(): Model
 	{
 		return $this->update->store();
+	}
+
+	/**
+	 * Undocumented function
+	 *
+	 * @return mixed
+	 */
+	public function delete()
+	{
+		return $this->delete->destroy();
 	}
 
 	/**

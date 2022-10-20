@@ -378,4 +378,13 @@ class Repository
 			fn() => $this->fill()->filled()->save()
 		);
 	}
+
+    public function destroy()
+    {
+        $this->observer->dispatch('beforeDelete');
+
+        $this->model->delete();
+
+        $this->observer->dispatch('afterDelete');
+    }
 }
