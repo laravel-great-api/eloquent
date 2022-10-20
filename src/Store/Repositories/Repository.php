@@ -348,6 +348,16 @@ class Repository
 	/**
 	 * Undocumented function
 	 *
+	 * @return boolean
+	 */
+	public function isDelete(): bool
+	{
+		return $this instanceof RepositoryDelete;
+	}
+
+	/**
+	 * Undocumented function
+	 *
 	 * @return Model
 	 */
 	private function save(): Model

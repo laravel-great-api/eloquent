@@ -17,7 +17,9 @@ class Observer
 		'creating' => 'beforeCreate',
 		'created' => 'afterCreate',
 		'updating' => 'beforeUpdate',
-		'updated' => 'afterUpdate'
+		'updated' => 'afterUpdate',
+		'deleting' => 'beforeDelete',
+		'deleted' => 'afterDelete',
 	];
 
 	/**
@@ -68,7 +70,7 @@ class Observer
 	 * Undocumented function
 	 *
 	 * @return Model
-	 */	
+	 */
 	public function getModel(): Model
 	{
 		return $this->repository->getModel();
@@ -169,9 +171,22 @@ class Observer
 	 * @param Closure $callback
 	 * @return void
 	 */
-	protected function updated(Closure $callback)
+	protected function deleting(Closure $callback)
 	{
-		if ($this->isUpdated()) {
+		if ($this->repository->isDelete()) {
+			$callback($this->getStore(), $this->getModel());
+		}
+	}
+
+	/**
+	 * Undocumented function
+	 *
+	 * @param Closure $callback
+	 * @return void
+	 */
+	protected function deleted(Closure $callback)
+	{
+		if ($this->repository->isDelete()) {
 			$callback($this->getStore(), $this->getModel());
 		}
 	}
@@ -192,6 +207,26 @@ class Observer
 	 * @return mixed
 	 */
 	protected function afterSave()
+	{
+		$this->boot();
+	}
+
+	/**
+	 * Undocumented function
+	 *
+	 * @return mixed
+	 */
+	protected function beforeDelete()
+	{
+		$this->boot();
+	}
+
+	/**
+	 * Undocumented function
+	 *
+	 * @return mixed
+	 */
+	protected function afterDelete()
 	{
 		$this->boot();
 	}
