@@ -171,6 +171,19 @@ class Observer
 	 * @param Closure $callback
 	 * @return void
 	 */
+	protected function updated(Closure $callback)
+	{
+		if ($this->isUpdated()) {
+			$callback($this->getStore(), $this->getModel());
+		}
+	}
+
+	/**
+	 * Undocumented function
+	 *
+	 * @param Closure $callback
+	 * @return void
+	 */
 	protected function deleting(Closure $callback)
 	{
 		if ($this->repository->isDelete()) {
