@@ -56,7 +56,7 @@ class Store
      */
     public function __construct(Model $model, array $data, ?Relation $relation = null)
     {
-        $this->create = new RepositoryCreate($relation ?? $model, $data, $this);
+        $this->create = new RepositoryCreate($relation?->getRelated() ?? $model, $data, $this);
         $this->update = new RepositoryUpdate($model, $data, $this);
         $this->delete = new RepositoryDelete($model, $data, $this);
     }
