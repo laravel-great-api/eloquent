@@ -19,12 +19,12 @@ use LaravelGreatApi\Eloquent\Store\Repositories\RepositoryUpdate;
  */
 class Store
 {
-	/**
-	 * Undocumented variable
-	 *
-	 * @var \Illuminate\Database\Eloquent\Relations\Relation|null
-	 */
-	private ?Relation $relation = null;
+    /**
+     * Undocumented variable
+     *
+     * @var boolean
+     */
+	private bool $relation = null;
 
     /**
      * Undocumented variable
@@ -56,6 +56,7 @@ class Store
      */
     public function __construct(Model $model, array $data, ?Relation $relation = null)
     {
+        $this->relation = $relation;
         $this->create = new RepositoryCreate($relation?->getRelated() ?? $model, $data, $this);
         $this->update = new RepositoryUpdate($model, $data, $this);
         $this->delete = new RepositoryDelete($model, $data, $this);
