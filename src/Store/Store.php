@@ -22,9 +22,9 @@ class Store
     /**
      * Undocumented variable
      *
-     * @var boolean
+     * @var Relation
      */
-	private bool $relation = null;
+	private Relation $relation = null;
 
     /**
      * Undocumented variable
