@@ -14,6 +14,8 @@ class Observer
 	 * @var array
 	 */
 	private static array $events = [
+		'saving' => 'beforeSave',
+		'saved' => 'afterSave',
 		'creating' => 'beforeCreate',
 		'created' => 'afterCreate',
 		'updating' => 'beforeUpdate',
@@ -124,6 +126,32 @@ class Observer
 	private function isUpdated(): bool
 	{
 		return $this->repository->isUpdate() && $this->repository->isSaved();
+	}
+
+	/**
+	 * Undocumented function
+	 *
+	 * @param Closure $callback
+	 * @return void
+	 */
+	protected function saving(Closure $callback)
+	{
+		if ($this->repository->isSaving()) {
+			$callback($this->getStore(), $this->getModel());
+		}
+	}
+
+	/**
+	 * Undocumented function
+	 *
+	 * @param Closure $callback
+	 * @return void
+	 */
+	protected function saved(Closure $callback)
+	{
+		if ($this->repository->isSaved()) {
+			$callback($this->getStore(), $this->getModel());
+		}
 	}
 
 	/**

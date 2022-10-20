@@ -292,7 +292,7 @@ class Repository
 	 */
 	public function isSaving(): bool
 	{
-		return $this->saved === null;
+		return $this->saved === null && ($this->isCreate() || $this->isUpdate());
 	}
 
 	/**
@@ -302,7 +302,7 @@ class Repository
 	 */
 	public function isSaved(): bool
 	{
-		return $this->saved === true;
+		return $this->saved === true && ($this->isCreate() || $this->isUpdate());
 	}
 
 	/**
