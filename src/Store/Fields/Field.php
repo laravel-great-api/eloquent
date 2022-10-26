@@ -2,7 +2,7 @@
 
 namespace LaravelGreatApi\Eloquent\Store\Fields;
 
-class NewField
+class Field
 {
 	public function string(string $fieldName, string $column = null): Str
 	{
@@ -22,10 +22,5 @@ class NewField
 	public function array($fieldName, $column = null)
 	{
 		return Arr::make($fieldName, $column);
-	}
-
-	public function hasMany($relationName, $column = null)
-	{
-		return HasMany::make($relationName, $column);
 	}
 }
