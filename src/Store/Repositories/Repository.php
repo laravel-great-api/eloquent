@@ -13,7 +13,7 @@ use LaravelGreatApi\Eloquent\Store\Store;
 use LaravelGreatApi\Helpers\Data;
 use LaravelGreatApi\Eloquent\Store\Observer;
 use LaravelGreatApi\Eloquent\Store\RelationManager;
-use LaravelGreatApi\Eloquent\Store\Fields\NewField;
+use LaravelGreatApi\Eloquent\Store\Fields\Field;
 use LaravelGreatApi\Eloquent\Store\Relations\ToManyRelation;
 use LaravelGreatApi\Eloquent\Store\Relations\ToOneRelation;
 
@@ -126,7 +126,7 @@ class Repository
 	 */
 	private function eachFields(Closure $callback)
 	{
-		foreach($this->store->fields(new NewField(), $this->getData()) as $field) {
+		foreach($this->store->fields(new Field(), $this->getData()) as $field) {
 			$callback($field);
 		}
 	}
