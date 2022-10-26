@@ -3,6 +3,7 @@
 namespace LaravelGreatApi\Eloquent\Query;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
 use LaravelGreatApi\Eloquent\Query\Concerns\BaseQueries;
 use LaravelGreatApi\Eloquent\Query\Concerns\FiltersBuilder;
 use LaravelGreatApi\Eloquent\Query\Concerns\Paginated;
@@ -16,6 +17,13 @@ use LaravelGreatApi\Eloquent\Query\Concerns\Paginated;
 class Query
 {
 	use Paginated, FiltersBuilder, BaseQueries;
+
+    /**
+     * Undocumented variable
+     *
+     * @var Request
+     */
+    private Request $request;
 
 	/**
 	 * Create Resource Builder Instance
@@ -124,4 +132,17 @@ class Query
 
 		return $this;
 	}
+
+    /**
+     * Undocumented function
+     *
+     * @param Request $request
+     * @return Query
+     */
+    public function withRequest(Request $request): Query
+    {
+        $this->request = $request;
+
+        return $this;
+    }
 }
