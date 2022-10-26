@@ -137,9 +137,9 @@ class Query
      * Undocumented function
      *
      * @param Request $request
-     * @return Query
+     * @return $this
      */
-    public function withRequest(Request $request): Query
+    public function withRequest(Request $request)
     {
         $this->request = $request;
 
