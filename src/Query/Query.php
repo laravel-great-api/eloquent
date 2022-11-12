@@ -23,7 +23,7 @@ class Query
      *
      * @var Request
      */
-    private Request $request;
+    protected Request $request;
 
 	/**
 	 * Create Resource Builder Instance
