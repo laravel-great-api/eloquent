@@ -23,4 +23,9 @@ class Field
 	{
 		return Arr::make($fieldName, $column);
 	}
+
+	public function boolean($fieldName, $column = null)
+	{
+		return Boolean::make($fieldName, $column);
+	}
 }
