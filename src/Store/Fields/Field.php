@@ -29,8 +29,8 @@ class Field
 		return Boolean::make($fieldName, $column);
 	}
 
-	public function uuid(string $fieldName, string $column = null): Uuid
+	public function uuid(string $fieldName): Uuid
 	{
-		return Uuid::make($fieldName, $column);
+		return Uuid::make($fieldName);
 	}
 }
