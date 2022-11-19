@@ -19,7 +19,7 @@ class Uuid extends Attribute
      *
      * @param string $fieldName
      * @param string|null $column
-     * @return Str
+     * @return Uuid
      */
     public static function make(string $fieldName, int $length = 5, string $column = null): self
     {
