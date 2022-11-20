@@ -46,7 +46,7 @@ class Data
 	 *
 	 * @return \Illuminate\Database\Eloquent\Collection|\Illuminate\Pagination\LengthAwarePaginator
 	 */
-	private function extract(): Collection|LengthAwarePaginator
+	private function extract()
 	{
 		if ($this->query->isPaginated()) {
 			return $this->query()->simplePaginate($this->query->getlimit());
