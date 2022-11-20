@@ -25,6 +25,15 @@ class Query
      */
     protected Request $request;
 
+	public function __call($name, $arguments)
+	{
+		$method = "{$name}Query";
+
+		if (method_exists($this, $method)) {
+			$this->addQuery(fn($query) => $this->{$method}($query, ...$arguments));
+		}
+	}
+
 	/**
 	 * Create Resource Builder Instance
 	 *
