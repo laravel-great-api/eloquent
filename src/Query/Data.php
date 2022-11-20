@@ -29,6 +29,7 @@ class Data
 	public function __construct(Query $query)
 	{
 		$this->query = $query;
+		$this->data = $this->extract();
 	}
 
 	/**
@@ -46,10 +47,10 @@ class Data
 	 *
 	 * @return \Illuminate\Database\Eloquent\Collection|\Illuminate\Pagination\LengthAwarePaginator
 	 */
-	private function extract()
+	private function extract(): Collection|LengthAwarePaginator
 	{
 		if ($this->query->isPaginated()) {
-			return $this->query()->simplePaginate($this->query->getlimit());
+			return $this->query()->paginate($this->query->getlimit());
 		}
 
 		return $this->query()->get();
@@ -62,6 +63,6 @@ class Data
 	 */
 	public function get()
 	{
-		return $this->extract();
+		return $this->data;
 	}
 }
