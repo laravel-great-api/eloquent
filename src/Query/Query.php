@@ -30,7 +30,7 @@ class Query
 		$method = "{$name}Query";
 
 		if (method_exists($this, $method)) {
-			$this->addQuery(fn($query) => $this->{$method}($query, ...$arguments));
+			return $this->addQuery(fn($query) => $this->{$method}($query, ...$arguments));
 		}
 	}
 
