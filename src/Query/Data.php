@@ -29,7 +29,6 @@ class Data
 	public function __construct(Query $query)
 	{
 		$this->query = $query;
-		$this->data = $this->extract();
 	}
 
 	/**
@@ -63,6 +62,6 @@ class Data
 	 */
 	public function get()
 	{
-		return $this->data;
+		return $this->extract();
 	}
 }
