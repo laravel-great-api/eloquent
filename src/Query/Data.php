@@ -50,7 +50,7 @@ class Data
 	private function extract(): Collection|LengthAwarePaginator
 	{
 		if ($this->query->isPaginated()) {
-			return $this->query()->paginate($this->query->getlimit());
+			return $this->query()->simplePaginate($this->query->getlimit());
 		}
 
 		return $this->query()->get();
